@@ -1,0 +1,185 @@
+\documentclass[11pt,          % font size: 11pt or 12pt
+               phd,            % degree:    ms or phd
+               %hardcopy,     % prepare document for hardcopy printing
+                              %  Don't enable for ETD submission.
+               onehalfspacing % spacing: onehalfspacing or doublespacing
+               ]{ncsuthesis}
+
+%%----------------------------------------------------------------------------%%
+%%------------------------------ Import Packages -----------------------------%%
+%%----------------------------------------------------------------------------%%
+
+\usepackage{booktabs}  % professionally typeset tables
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{lipsum}    % filler text
+
+
+%%----------------------------------------------------------------------------%%
+%%-------------------------------- Fonts -------------------------------------%%
+%%----------------------------------------------------------------------------%%
+
+%% ETD guidelines don't specify the font.  You can enable the fonts
+%% by uncommenting the appropriate lines.
+%% See http://www.tug.dk/FontCatalogue/ for more options.
+
+%% Serif Fonts -------------------------------------------------
+%%  The four serif fonts listed here (Utopia, Palatino, Kerkis,
+%%  and Times) all have math support.
+%%  Uncomment one of the below if you would like to switch to
+%%  something other than the default Computer Modern.
+
+%% Utopia
+%\usepackage[T1]{fontenc}
+%\usepackage[adobe-utopia]{mathdesign}
+
+%% Palatino
+%\usepackage[T1]{fontenc}
+%\usepackage[sc]{mathpazo}
+%\linespread{1.05}
+
+%% Kerkis
+%\usepackage[T1]{fontenc}
+%\usepackage{kmath,kerkis}
+
+%% Times
+%\usepackage[T1]{fontenc}
+%\usepackage{mathptmx}
+
+%% Sans serif fonts -------------------------
+
+%\usepackage[scaled]{helvet}  % Helvetica
+%\usepackage[scaled]{berasans} % Bera Sans
+
+
+
+
+%%----------------------------------------------------------------------------%%
+%%---------------------------- Formatting Options ----------------------------%%
+%%----------------------------------------------------------------------------%%
+%%
+
+%% -------------------------------------------------------------------------- %%
+%% Disposition format -- any titles, headings, section titles
+%%  These formatting commands affect all headings, titles, headings,
+%%  so sizing commands should not be used here.
+%%  Formatting options to consider are
+%%     +  \sffamily - sans serif fonts.  Dispositions are often typeset in
+%%                    sans serif, so this is a good option. 
+%%     +  \rmfamily - serif fonts
+%%     +  \bfseries - bold face
+%\dispositionformat{\sffamily\bfseries}   % bold and sans serif
+\dispositionformat{\bfseries}            % bold and serif
+
+%% Formatting for centered headings - Abstract, Dedication, etc. headings
+%%  This is where one might put a sizing command.
+%%  \MakeUppercase can be used to typeset all headings in uppercase.
+\headingformat{\large\MakeUppercase}   % All letters uppercase
+%\headingformat{\large}                % Not all uppercase
+%\headingformat{\Large\scshape}        % Small Caps, used with serif fonts.
+
+
+%%----------------------------------------------------------------------------%%
+%%---------------------------- Content Options -------------------------------%%
+%%----------------------------------------------------------------------------%%
+%% Size of committee: 3 or 4
+%\committeesize{3}
+\committeesize{4}
+
+%% Members of committee
+\chair{Doug Dodd}
+\memberI{Alex Anderson}
+\memberII{Bobby Brown}
+\memberIII{Chris Cox} % unnecessary if committeesize=3
+
+%% Student writing thesis, first middle last
+\student{John}{Mark}{Smith}
+
+%% Degree program
+\program{Nuclear Engineering}
+
+%% Thesis Title
+%%  Keep in mind, according to ETD guidelines:
+%%    +  Capitalize first letter of important words.
+%%    +  Use inverted pyramid shape if title spans more than one line.
+%%
+%%  Note: To break the title onto multiple lines, use \break instead of \\.
+\thesistitle{A North Carolina State University Sample \LaTeX{} Thesis \break 
+with a Title So Long it Needs a Line Break}
+
+%% Hyperref package creates PDF metadata and hyperlinks in Table of Contents
+%%  and citations.  You don't have to use this package if you don't want it.
+\usepackage[
+  pdfauthor={John Mark Smith},
+  pdftitle={The Title},
+  pdfcreator={pdftex},
+  pdfsubject={NC State ETD Thesis},
+  pdfkeywords={keyword1, keyword2},
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+]{hyperref}
+
+%%----------------------------------------------------------------------------%%
+%%---------------------------- Personal Macros -------------------------------%%
+%%----------------------------------------------------------------------------%%
+
+%% A central location to add your favorite macros.
+
+%% A few examples to get you started.
+\newcommand{\uv}[1]{\ensuremath{\mathbf{\hat{#1}}}}
+\newcommand{\bo}{\ensuremath{\boldsymbol{\Omega}}}
+\newcommand{\eref}[1]{Eq.~\ref{#1}}
+\newcommand{\fref}[1]{Figure~\ref{#1}}
+\newcommand{\tref}[1]{Table~\ref{#1}}
+
+%%---------------------------------------------------------------------------%%
+\begin{document}
+
+%%---------------------------------------------------------------------------%%
+\frontmatter
+
+\include{front}
+
+%%---------------------------------------------------------------------------%%
+\mainmatter
+
+\include{Chapter-1/Chapter-1}
+\include{Chapter-2/Chapter-2}
+\include{Chapter-3/Chapter-3}
+
+
+
+%%---------------------------------------------------------------------------%%
+%%--------------------------------- Bibliography ----------------------------%%
+%%---------------------------------------------------------------------------%%
+%%  You can use the bibitem list.
+%\bibliographystyle{unsrt}
+%\begin{thebibliography}{99}
+%\bibitem{cb02}
+%Casella, G. and Berger, R.L. (2002)
+%\newblock {\it Statistical Inference, Second Edition.}
+%Duxbury Press, Belmont, CA.
+%
+%\bibitem{t06}
+%Tsiatis, A.A. (2006)
+%\newblock {\it Semiparametric Theory and Missing Data.}
+%Springer, New York.
+%
+%\end{thebibliography}
+
+%% or use BibTeX
+\bibliography{YourName-thesis}{}
+\bibliographystyle{plain}
+
+% Appendices
+\appendix
+
+\include{Appendix-A/Appendix-A}
+
+
+%%---------------------------------------------------------------------------%%
+\backmatter
+
+
+\end{document}
