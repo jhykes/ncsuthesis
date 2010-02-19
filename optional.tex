@@ -1,0 +1,71 @@
+%%  Optional Packages to consider.   These packages are compatible with
+%%    ncsuthesis.  
+
+%%----------------------------------------------------------------------------%%
+%% Hyperref package creates PDF metadata and hyperlinks in Table of Contents
+%%  and citations.  Based on feedback from the NCSU thesis editor, 
+%%  the links are not visually distinct from normal text (i.e. no change
+%%  in color or extra boxes).
+\usepackage[
+  pdfauthor={John Mark Smith},
+  pdftitle={The Title},
+  pdfcreator={pdftex},
+  pdfsubject={NC State ETD Thesis},
+  pdfkeywords={keyword1, keyword2},
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+]{hyperref}
+
+
+%% -------------------------------------------------------------------------- %%
+%% Fancy chapter headings
+%%  available options: Sonny, Lenny, Glenn, Conny, Rejne, Bjarne
+\usepackage[Sonny]{fncychap}
+
+%% -------------------------------------------------------------------------- %%
+%% Microtype - If you use pdfTeX to compile your thesis, you can use
+%%              the microtype package to access advanced typographic
+%%              features.  By default, using the microtype package enables
+%%              character protrusion (placing glyphs a hair past the right 
+%%              margin to make a visually straighter edge)
+%%              and font expansion (adjusting font width slightly to get 
+%%              more favorable justification).
+%%              Using microtype should decrease the number of lines
+%%              ending in hyphens.
+\usepackage{microtype}
+
+
+%%----------------------------------------------------------------------------%%
+%% Fonts 
+
+%% ETD guidelines don't specify the font.  You can enable the fonts
+%%  by uncommenting the appropriate lines.  Using the default Computer 
+%%  Modern fonts is *not* required.  A few common choices are below.
+%%  See http://www.tug.dk/FontCatalogue/ for more options.
+
+%% Serif Fonts -------------------------------------------------
+%%  The four serif fonts listed here (Utopia, Palatino, Kerkis,
+%%  and Times) all have math support.
+
+%% Utopia
+\usepackage[T1]{fontenc}
+\usepackage[adobe-utopia]{mathdesign}
+
+%% Palatino
+%\usepackage[T1]{fontenc}
+%\usepackage[sc]{mathpazo}
+%\linespread{1.05}
+
+%% Kerkis
+%\usepackage[T1]{fontenc}
+%\usepackage{kmath,kerkis}
+
+%% Times
+%\usepackage[T1]{fontenc}
+%\usepackage{mathptmx}
+
+%% Sans serif fonts -------------------------
+
+%\usepackage[scaled]{helvet}  % Helvetica
+%\usepackage[scaled]{berasans} % Bera Sans
