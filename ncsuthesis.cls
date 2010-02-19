@@ -13,7 +13,7 @@
 %% --------------------------------------------------------------------
 %% 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2009/10/21 v0.1 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2010/02/19 v0.2 NC State ETD conformant thesis class]
 %% -------------------------------------------------------------------------- %%
 %% ------------------------------ Thesis type ------------------------------- %%
 %% -------------------------------------------------------------------------- %%
@@ -30,7 +30,6 @@
 \DeclareOption{doublespacing}{
      \renewcommand{\ncsu@defaultspacing}{\doublespacing}}
 
-%% Spacing options
 \newenvironment{lscape}{\begin{lscapenum}}{\end{lscapenum}}
 \DeclareOption{hardcopy}{
     \renewenvironment{lscape}{\begin{lscapenotnum}}{\end{lscapenotnum}}
@@ -51,9 +50,9 @@
 \RequirePackage{nolbreaks}
 \RequirePackage{ifthen}
 \RequirePackage{sectsty}
-\RequirePackage{tocloft}
+\RequirePackage[titles]{tocloft}
 \RequirePackage{graphicx}
-\RequirePackage[nottoc, notbib]{tocbibind} % includes lof, lot, refs in toc
+\RequirePackage[nottoc]{tocbibind} % includes lof, lot, refs in toc
 \RequirePackage{calc}
 
 %%----------------------------------------------------------------------------%%
@@ -108,19 +107,57 @@
 %%---------------------------  Content Options -------------------------------%%
 %% -------------------------------------------------------------------------- %%
 %% Author name
-\newcommand{\ncsu@authorfirst}{John}
-\newcommand{\ncsu@authormiddle}{Mark}
-\newcommand{\ncsu@authorlast}{Student}
-\providecommand{\student}[3]{
-    \renewcommand{\ncsu@authorfirst}{#1}
-    \renewcommand{\ncsu@authormiddle}{#2}
-    \renewcommand{\ncsu@authorlast}{#3}
-    \author{\ncsu@authorfirst{} \ncsu@authormiddle{} \ncsu@authorlast}}
+\newcommand{\ncsu@authorfirstmiddle}{First Middle}
+\newcommand{\ncsu@authorlast}{Last}
+
+%% Command to test for period after middle name
+\newboolean{@ncsu@needsperiod}
+\newcommand{\ncsu@testlastchar}[2]{%
+    \ifthenelse{\equal{#2}{\relax}}{
+        \ifthenelse{\equal{#1}{.}}{%
+            \setboolean{@ncsu@needsperiod}{false}
+        }{% #1 != .
+            \setboolean{@ncsu@needsperiod}{true}
+        }
+        \let\next=\relax
+    }
+    {% #2 != relax
+        \let\next=\ncsu@testlastchar
+    }
+    \next#2
+}
+
+\providecommand{\student}[2]{
+    \renewcommand{\ncsu@authorfirstmiddle}{#1}
+    \renewcommand{\ncsu@authorlast}{#2}
+    \ncsu@testlastchar#1\relax
+    \author{\ncsu@authorfirstmiddle{} \ncsu@authorlast}
+}
+
+%% Degree year - in case the degree year doesn't match the current year.
+\newcommand{\ncsu@year}{\the\year}
+\providecommand{\degreeyear}[1]{
+    \renewcommand{\ncsu@year}{#1}
+}
 
 %% -------------------------------------------------------------------------- %%
 %% Thesis Title
 \newcommand{\ncsu@thesistitle}{My Thesis Title}
 \providecommand{\thesistitle}[1]{\renewcommand{\ncsu@thesistitle}{#1}}
+
+%% -------------------------------------------------------------------------- %%
+%% ---------------------  Section Commands ---------------------------------- %%
+%% -------------------------------------------------------------------------- %%
+
+%% -------------------------------------------------------------------------- %%
+%%  Redefine the \chapter* driver \@makeschapterhead
+%% Center the chapter* head:
+\AtBeginDocument{% at begin doc is necessary since fncychap
+                 %  redefines \@makeschapterhead
+    \renewcommand{\@makeschapterhead}[1]{%
+        {\parindent0pt\centering\ncsu@headingformat#1\par\nobreak\vskip25pt}%
+    }
+}
 
 %% -------------------------------------------------------------------------- %%
 %% Abstract page commands
@@ -129,18 +166,17 @@
 %%     instead of \\
 \newcommand{\abstractname}{Abstract}
 \newenvironment{abstract}{%
-   \pagestyle{empty}
    \singlespacing
    \titlepage
-   \begin{center}
-    {\ncsu@headingformat \abstractname}
-   \end{center}
-   \vspace{2\ncsu@lineheight}
-   \MakeUppercase{\ncsu@authorlast{}, \ncsu@authorfirst{} \ncsu@authormiddle{}.}
+   \chapter*{\abstractname}
+   \MakeUppercase{\ncsu@authorlast{}, \ncsu@authorfirstmiddle{}}%
+   \ifthenelse{\boolean{@ncsu@needsperiod}}{\@. }{~}%
     \nohyphens{\nolbreaks{\ncsu@thesistitle}.
-   (Under the direction of Dr. \ncsu@chair.)}\\
+   (Under the direction of \ncsu@chair.)}\\
 
    \ncsu@defaultspacing
+   \thispagestyle{empty}
+   \pagestyle{empty}
 }%
 {\endtitlepage \pagestyle{plain}}
 
@@ -152,7 +188,7 @@
       \quad
       \vspace{0.35\textheight}
 
-      \copyright{} Copyright \the\year{} by \@author \\[1em]
+      \copyright{} Copyright \ncsu@year{} by \@author \\[1em]
       All Rights Reserved
 
       \vfill
@@ -241,7 +277,7 @@
            \vfill
        \ncsu@program\\[2.5\ncsu@lineheight]
        \ncsu@citystate\\[1\ncsu@lineheight]
-       \number\year
+       \ncsu@year
            \vfill
        APPROVED BY:
            \vfill
@@ -256,11 +292,7 @@
 %% -------------------------------------------------------------------------- %%
 %%  Template
 \newcommand{\ncsu@dedbioack}[1]{
-    \clearpage
-    \begin{center}%
-      {\ncsu@headingformat{#1}}
-    \end{center}
-    \vspace{1.5\ncsu@lineheight}
+    \chapter*{{\ncsu@headingformat{#1}}}
 }
 
 %%  Dedication
@@ -282,11 +314,9 @@
 %% -------------------------  Table of Contents ----------------------------- %%
 %% -------------------------------------------------------------------------- %%
 \renewcommand{\contentsname}{Table of Contents}
-\setlength{\cftbeforetoctitleskip}{0em}
-\setlength{\cftaftertoctitleskip}{2em}
-\renewcommand{\cfttoctitlefont}{\hfill\ncsu@headingformat}
+\settowidth{\cftchapnumwidth}{\textbf{Chapter 00}}
+\renewcommand{\cftchappresnum}{Chapter }
 \renewcommand{\cftchapleader}{\cftdotfill{\cftsecdotsep}}
-\renewcommand{\cftaftertoctitle}{\hfill}
 \newcommand{\thesistableofcontents}{
     \singlespacing
     \tableofcontents
@@ -295,11 +325,7 @@
 }
 
 \renewcommand{\listfigurename}{List of Figures}
-\setlength{\cftbeforeloftitleskip}{0em}
-\setlength{\cftafterloftitleskip}{2em}
-\renewcommand{\cftloftitlefont}{\hfill\ncsu@headingformat}
-\renewcommand{\cftafterloftitle}{\hfill}
-\settowidth{\cftfignumwidth}{Figure 0.00}
+\settowidth{\cftfignumwidth}{Figure 00.00}
 \renewcommand{\cftfigpresnum}{Figure }
 \newcommand{\thesislistoffigures}{
     \singlespacing
@@ -309,11 +335,7 @@
 }
 
 \renewcommand{\listtablename}{List of Tables}
-\setlength{\cftbeforelottitleskip}{0em}
-\setlength{\cftafterlottitleskip}{2em}
-\renewcommand{\cftlottitlefont}{\hfill\ncsu@headingformat}
-\renewcommand{\cftafterlottitle}{\hfill}
-\settowidth{\cfttabnumwidth}{Table 10.100}
+\settowidth{\cfttabnumwidth}{Table 00.00}
 \renewcommand{\cfttabpresnum}{Table }
 \newcommand{\thesislistoftables}{
     \singlespacing
@@ -414,59 +436,77 @@
 %% -------------------------------------------------------------------------- %%
 %% -------------------------  References ------------------------------------ %%
 %% -------------------------------------------------------------------------- %%
-%% The vspace commands are necessary to get the Reference title at the top
-%%  of the page.  The hfills center the title.
-\newcommand{\ncsu@bibname}{References}
-\renewcommand{\bibname}{\vspace*{-3.5em}\hfill
-                        \ncsu@headingformat \ncsu@bibname
-                        \hfill \vspace{-1em}}
-                        % for Lenny \vspace{-4em}}
-%% We have to add the References to the TOC manually since the
-%%  definition of the \bibname includes a hfill and sizing commands.
-\let\ncsu@thebibliography\thebibliography
-\renewenvironment{thebibliography}[1]
-{
-    \singlespacing
-    \begin{ncsu@thebibliography}{#1}
-    \protect\addcontentsline{toc}{chapter}{\ncsu@bibname}
-}
-{
-    \end{ncsu@thebibliography}
-    \ncsu@defaultspacing
+\renewcommand{\bibname}{References}
+%% natbib redefines \thebibliography, so we add our own requirements
+%% at \begin{document} time.
+\AtBeginDocument{
+    \let\ncsu@thebibliography\thebibliography
+    \let\endncsu@thebibliography\endthebibliography
+    \renewenvironment{thebibliography}[1]
+    {
+        \singlespacing
+        \begin{ncsu@thebibliography}{#1}
+    }
+    {
+        \end{ncsu@thebibliography}
+        \ncsu@defaultspacing
+    }
 }
 
 %% -------------------------------------------------------------------------- %%
 %% ------------------------- The Appendices  -------------------------------- %%
 %% -------------------------------------------------------------------------- %%
+
 \newlength{\appendixwidth}
-\settowidth{\appendixwidth}{\textbf{Appendix AA}}
+\settowidth{\appendixwidth}{Appendix A}
+\addtolength{\appendixwidth}{1em}
+\providecommand{\appendixheader}[1]{
+    \renewcommand{\ncsu@appendixheader}{#1}
+}
+
+%% Count the total number of appendices
+\RequirePackage{totcount}
+\regtotcounter{chapter} % chapter counter is used for appendices
 
 \let\ncsu@appendix\appendix
+\AtBeginDocument{%
 \renewcommand{\appendix}{
+    \ifthenelse{\isundefined{\ncsu@appendixheader}}
+    % Appendix title page heading not defined, define it
+    {
+        \ifthenelse{\totvalue{chapter} = 1 }%
+        %% number of appendices = 1
+        {\newcommand{\ncsu@appendixheader}{Appendix}}
+        %% number of appendices > 1
+        {\newcommand{\ncsu@appendixheader}{Appendices}}
+    }
+    % Appendix title page heading already defined, do nothing
+    {}
+
+    \chapter*{\ncsu@appendixheader} %% insert 'Appendix' titlepage
+    \addcontentsline{toc}{chapter}{\ncsu@appendixheader}
     %% Adding "Appendix" before letter in TOC
     %%  We must change the width of the box which the appendix letter is set in
     %%  and add the "Appendix " before the letter.  See tocloft documentation.
     \addtocontents{toc}{
-        \protect\renewcommand{\protect\cftchappresnum}{Appendix }}
-    \addtocontents{toc}{
-        \protect\renewcommand{\protect\cftchapnumwidth}{\protect\appendixwidth}}
-
-    \ncsu@dedbioack{\appendixname} %% insert 'Appendix' titlepage
-    \addcontentsline{toc}{chapter}{\appendixname}
+        \protect\renewcommand{\protect\cftchappresnum}{Appendix }
+        \protect\renewcommand{\protect\cftchapnumwidth}{\protect\appendixwidth}
+        \protect\renewcommand{\protect\cftchapfont}{\protect\cftsecfont}
+        \protect\setlength{\protect\cftbeforechapskip}{\protect\cftbeforesecskip}
+        \protect\setlength{\protect\cftchapindent}{\protect\cftsecindent}
+        \protect\renewcommand{\protect\cftchappagefont}{\protect\cftchapfont}
+        \protect\setlength{\protect\cftsecindent}{\protect\cftsubsecindent}
+        \protect\setlength{\protect\cftsubsecindent}{\protect\cftsubsubsecindent}
+        \protect\setcounter{tocdepth}{2}
+    }
     \clearpage
     \ncsu@appendix %% call internal \appendix macro
-}
-
-\newcommand{\Appendix}[1]{
-    \renewcommand{\cftchapfont}{\mdseries}
-    \setlength{\cftbeforechapskip}{\cftbeforesecskip}
-    \setlength{\cftchapindent}{\cftsecindent}
-    \chapter{#1}
-}
+} % \renewcommand{appendix}
+} % \AtBeginDocument
 
 \ncsu@defaultspacing
 %% 
-%% Copyright (C) 2009 by Josh Hykes <jmhykes@ncsu.edu>
+%% Copyright (C) 2009-2010 by Josh Hykes <jmhykes@ncsu.edu>
 %% 
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License (LPPL), either
