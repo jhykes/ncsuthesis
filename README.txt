@@ -15,8 +15,8 @@ example tex files demonstrating the use of the class file.
 Archive contents:
    Files:
        * YourName-thesis.tex - main tex thesis document
-       * YourName-thesis.pdf - main PDF thesis document
        * front.tex - front matter thesis content
+       * optional.tex - ncsuthesis-compatible optional packages 
        * YourName-thesis.bib - BibTeX references file
 
        * ncsuthesis.cls - NC State thesis class
@@ -24,6 +24,7 @@ Archive contents:
                            a document, used for page rotation.
                            Your LaTeX distribution may include
                            this, but mine didn't.
+       * totcount.sty - A package to count the total number of chapters.
 
        * Makefile - generate thesis PDF on command line with make
        * SConstruct - generates thesis PDF on command line with scons
@@ -32,7 +33,7 @@ Archive contents:
        * ncsuthesis-source/ - contains ncsuthesis class dtx file.
            - See ncsuthesis.pdf for more information on the design.
 
-       * Chapter-1/ Chapter-2/ Chapter-3/ Chapter-4/ Chapter-5/ 
+       * Chapter-1/ Chapter-2/ Chapter-3/
            - example directory structure to house chapter tex files.
        * Appendix-A/
            - contains Appendix A tex file.
