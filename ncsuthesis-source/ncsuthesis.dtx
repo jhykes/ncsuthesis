@@ -78,7 +78,7 @@ and the derived files           ncsuthesis.ins,
 %</internal>
 %<*class>
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2010/02/19 v0.2 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2010/02/24 v0.2 NC State ETD conformant thesis class]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -113,7 +113,7 @@ and the derived files           ncsuthesis.ins,
 %\author{
 %  Joshua Hykes\thanks{E-mail: jmhykes@ncsu.edu}
 %}
-%\date{Released 2/19/2010}
+%\date{Released 2/24/2010}
 %
 %\maketitle
 %
@@ -199,6 +199,8 @@ and the derived files           ncsuthesis.ins,
 %  The \tc{} class was written from scratch, as much as is possible in our
 %  internet age.  Peter Bloomfield made a number of helpful suggestions and
 %  improvements, especially regarding the page headings.  
+%  \href{http://www4.stat.ncsu.edu/~bloomfld/latex.html}{His \LaTeX\ website} 
+%  has a number of helpful resources.
 %  The \href{http://www.esm.psu.edu/psuthesis/}{Penn State 
 %  \LaTeX{} thesis class} written by Professors Gary 
 %  Gray and Francesco Costanzo was used as a reference for many of the 
@@ -305,8 +307,6 @@ and the derived files           ncsuthesis.ins,
 \setlength{\textfloatsep}{3\ncsu@lineheight}
 \setlength{\intextsep}{3\ncsu@lineheight}
 
-
-
 %%----------------------------------------------------------------------------%%
 %%---------------------------  Content Options -------------------------------%%
 %% -------------------------------------------------------------------------- %%
@@ -319,7 +319,7 @@ and the derived files           ncsuthesis.ins,
 \newcommand{\ncsu@testlastchar}[2]{%
     \ifthenelse{\equal{#2}{\relax}}{
         \ifthenelse{\equal{#1}{.}}{%
-            \setboolean{@ncsu@needsperiod}{false} 
+            \setboolean{@ncsu@needsperiod}{false}
         }{% #1 != .
             \setboolean{@ncsu@needsperiod}{true}
         }
@@ -349,17 +349,14 @@ and the derived files           ncsuthesis.ins,
 \newcommand{\ncsu@thesistitle}{My Thesis Title}
 \providecommand{\thesistitle}[1]{\renewcommand{\ncsu@thesistitle}{#1}}
 
-
-
 %% -------------------------------------------------------------------------- %%
-%% ---------------------  Section Commands ---------------------------------- %%
+%% ---------------------  Chapter Commands ---------------------------------- %%
 %% -------------------------------------------------------------------------- %%
-
 
 %% -------------------------------------------------------------------------- %%
 %%  Redefine the \chapter* driver \@makeschapterhead
 %% Center the chapter* head:
-\AtBeginDocument{% at begin doc is necessary since fncychap 
+\AtBeginDocument{% at begin doc is necessary since fncychap
                  %  redefines \@makeschapterhead
     \renewcommand{\@makeschapterhead}[1]{%
         {\parindent0pt\centering\ncsu@headingformat#1\par\nobreak\vskip25pt}%
@@ -667,7 +664,6 @@ and the derived files           ncsuthesis.ins,
 \newlength{\appendixwidth}
 \settowidth{\appendixwidth}{Appendix A}
 \addtolength{\appendixwidth}{1em}
-%\newcommand{\ncsu@appendixheader}{Appendix}
 \providecommand{\appendixheader}[1]{
     \renewcommand{\ncsu@appendixheader}{#1}
 }
@@ -676,8 +672,18 @@ and the derived files           ncsuthesis.ins,
 \RequirePackage{totcount}
 \regtotcounter{chapter} % chapter counter is used for appendices
 
-\let\ncsu@appendix\appendix
 \AtBeginDocument{%
+%% Since ETD requirements are different than LaTeX's normal formatting of 
+%% the Table of Content's Appendix listings,
+%% we change the indentation of chapters, sections, and subsections in
+%% the appendix part of the table of contents, but no deeper divisions,
+%% so we must cap the tocdepth at 2:
+\newcounter{ncsu@appendixtocdepth}
+\ifthenelse{\c@tocdepth > 2}
+{\setcounter{ncsu@appendixtocdepth}{2}}
+{\setcounter{ncsu@appendixtocdepth}{\c@tocdepth}}
+
+\let\ncsu@appendix\appendix
 \renewcommand{\appendix}{
     \ifthenelse{\isundefined{\ncsu@appendixheader}}
     % Appendix title page heading not defined, define it
@@ -704,8 +710,8 @@ and the derived files           ncsuthesis.ins,
         \protect\setlength{\protect\cftchapindent}{\protect\cftsecindent}
         \protect\renewcommand{\protect\cftchappagefont}{\protect\cftchapfont}
         \protect\setlength{\protect\cftsecindent}{\protect\cftsubsecindent}
-        \protect\setlength{\protect\cftsubsecindent}{\protect\cftsubsubsecindent}
-        \protect\setcounter{tocdepth}{2}
+        \protect\addtolength{\protect\cftsubsecindent}{\cftsecnumwidth}
+        \protect\setcounter{tocdepth}{\c@ncsu@appendixtocdepth}
     }
     \clearpage
     \ncsu@appendix %% call internal \appendix macro

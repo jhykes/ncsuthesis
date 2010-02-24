@@ -13,7 +13,7 @@
 %% --------------------------------------------------------------------
 %% 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2010/02/19 v0.2 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2010/02/24 v0.2 NC State ETD conformant thesis class]
 %% -------------------------------------------------------------------------- %%
 %% ------------------------------ Thesis type ------------------------------- %%
 %% -------------------------------------------------------------------------- %%
@@ -146,7 +146,7 @@
 \providecommand{\thesistitle}[1]{\renewcommand{\ncsu@thesistitle}{#1}}
 
 %% -------------------------------------------------------------------------- %%
-%% ---------------------  Section Commands ---------------------------------- %%
+%% ---------------------  Chapter Commands ---------------------------------- %%
 %% -------------------------------------------------------------------------- %%
 
 %% -------------------------------------------------------------------------- %%
@@ -468,8 +468,18 @@
 \RequirePackage{totcount}
 \regtotcounter{chapter} % chapter counter is used for appendices
 
-\let\ncsu@appendix\appendix
 \AtBeginDocument{%
+%% Since ETD requirements are different than LaTeX's normal formatting of
+%% the Table of Content's Appendix listings,
+%% we change the indentation of chapters, sections, and subsections in
+%% the appendix part of the table of contents, but no deeper divisions,
+%% so we must cap the tocdepth at 2:
+\newcounter{ncsu@appendixtocdepth}
+\ifthenelse{\c@tocdepth > 2}
+{\setcounter{ncsu@appendixtocdepth}{2}}
+{\setcounter{ncsu@appendixtocdepth}{\c@tocdepth}}
+
+\let\ncsu@appendix\appendix
 \renewcommand{\appendix}{
     \ifthenelse{\isundefined{\ncsu@appendixheader}}
     % Appendix title page heading not defined, define it
@@ -496,8 +506,8 @@
         \protect\setlength{\protect\cftchapindent}{\protect\cftsecindent}
         \protect\renewcommand{\protect\cftchappagefont}{\protect\cftchapfont}
         \protect\setlength{\protect\cftsecindent}{\protect\cftsubsecindent}
-        \protect\setlength{\protect\cftsubsecindent}{\protect\cftsubsubsecindent}
-        \protect\setcounter{tocdepth}{2}
+        \protect\addtolength{\protect\cftsubsecindent}{\cftsecnumwidth}
+        \protect\setcounter{tocdepth}{\c@ncsu@appendixtocdepth}
     }
     \clearpage
     \ncsu@appendix %% call internal \appendix macro
