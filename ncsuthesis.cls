@@ -201,17 +201,53 @@
 \newcommand{\ncsu@committeesize}{4}
 \providecommand{\committeesize}[1]{\renewcommand{\ncsu@committeesize}{#1}}
 
+%% For each committee member, we have their name and title.
+%%  By default, their title is empty.  We use an optional argument
+%%  to set the title of committee members or to set the chair's
+%%  title to something other than `Chair of Advisory Committee'.
 \newcommand{\ncsu@chair}{Advisor Q. Chair}
-\providecommand{\chair}[1]{\renewcommand{\ncsu@chair}{#1}}
+\newcommand{\ncsu@chairtitle}{Chair of Advisory Committee}
+\providecommand{\chair}[2][]{
+    \renewcommand{\ncsu@chair}{#2}
+    % Checking if optional title argument is present.
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@chairtitle}{#1}}
+}
 
 \newcommand{\ncsu@memberI}{Member 1 of Committee}
-\providecommand{\memberI}[1]{\renewcommand{\ncsu@memberI}{#1}}
+\newcommand{\ncsu@memberItitle}{}
+\providecommand{\memberI}[2][]{
+    \renewcommand{\ncsu@memberI}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberItitle}{#1}}
+}
 
 \newcommand{\ncsu@memberII}{Member 2 of Committee}
-\providecommand{\memberII}[1]{\renewcommand{\ncsu@memberII}{#1}}
+\newcommand{\ncsu@memberIItitle}{}
+\providecommand{\memberII}[2][]{
+    \renewcommand{\ncsu@memberII}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIItitle}{#1}}
+}
 
 \newcommand{\ncsu@memberIII}{Member 3 of Committee}
-\providecommand{\memberIII}[1]{\renewcommand{\ncsu@memberIII}{#1}}
+\newcommand{\ncsu@memberIIItitle}{}
+\providecommand{\memberIII}[2][]{
+    \renewcommand{\ncsu@memberIII}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIIItitle}{#1}}
+}
+
+\newcommand{\ncsu@memberIV}{Member 4 of Committee}
+\newcommand{\ncsu@memberIVtitle}{}
+\providecommand{\memberIV}[2][]{
+    \renewcommand{\ncsu@memberIV}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIVtitle}{#1}}
+}
+
+\newcommand{\ncsu@memberV}{Member 5 of Committee}
+\newcommand{\ncsu@memberVtitle}{}
+\providecommand{\memberV}[2][]{
+    \renewcommand{\ncsu@memberV}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberVtitle}{#1}}
+}
+
 
 \newcommand{\ncsu@titlepageparagraph}{
  \ifthenelse{\equal{\ncsu@thesistype}{phd}}{
@@ -247,19 +283,38 @@
 \newcommand{\ncsu@committeesignatures}{
   \ifthenelse{\ncsu@committeesize=3}{
     \begin{tabular}[t]{c@{\hspace{0.5in}}c}
-       \ncsu@signatureline{\ncsu@memberI} &
-       \ncsu@signatureline{\ncsu@memberII} \\[6.7em]
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6.7em]
     \end{tabular}
-    \ncsu@signatureline[Chair of Advisory Committee]{\ncsu@chair}
+    \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}
 }{} % end ifthenelse = 3
   \ifthenelse{\ncsu@committeesize=4}{
     \begin{tabular}[t]{c@{\hspace{0.5in}}c}
-       \ncsu@signatureline{\ncsu@memberI} &
-       \ncsu@signatureline{\ncsu@memberII} \\[6em]
-       \ncsu@signatureline{\ncsu@memberIII} &
-       \ncsu@signatureline[Chair of Advisory Committee]{\ncsu@chair} \\
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
+       \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+       \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
     \end{tabular}
 }{} % end ifthenelse = 4
+  \ifthenelse{\ncsu@committeesize=5}{
+    \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+       \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+       \ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5.7em]
+    \end{tabular}
+    \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}
+}{} % end ifthenelse = 5
+  \ifthenelse{\ncsu@committeesize=6}{
+    \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+       \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+       \ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
+       \ncsu@signatureline[\ncsu@memberVtitle]{\ncsu@memberV} &
+       \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
+    \end{tabular}
+}{} % end ifthenelse = 6
 }
 
 \newcommand{\maketitlepage}{

@@ -1,6 +1,5 @@
 \documentclass[11pt,          % font size: 11pt or 12pt
-               phd,            % degree:    ms or phd
-                              %  Don't enable for ETD submission.
+               phd,           % degree:    ms or phd
                onehalfspacing % spacing: onehalfspacing or doublespacing
                ]{ncsuthesis}
 
@@ -52,17 +51,25 @@
 %%----------------------------------------------------------------------------%%
 %%---------------------------- Content Options -------------------------------%%
 %%----------------------------------------------------------------------------%%
-%% Size of committee: 3 or 4
-%\committeesize{3}
+%% Size of committee: 3, 4, 5, or 6 -- this number includes the chair
 \committeesize{4}
 
 %% Members of committee
+%%  Each of the following member commands takes an optional argument
+%%   to specify their role on the committee.  For example, if you have two 
+%%   co-chairs on your committee of four, you would use the following:
+%%      \chair[Co-chair of Advisory Committee]{Doug Dodd}
+%%      ...
+%%      \memberIII[Co-chair of Advisory Committee]{Chris Cox}
+%%
 \chair{Doug Dodd}
 \memberI{Alex Anderson}
 \memberII{Bobby Brown}
-\memberIII{Chris Cox} % unnecessary if committeesize=3
+\memberIII{Chris Cox}   % unnecessary if committeesize=3
+\memberIV{Fred Ford}    % unnecessary if committeesize=3 or 4
+\memberV{Edna Everitt}  % unnecessary if committeesize=3, 4, or 5
 
-%% Student writing thesis, \student{first middle}{last}
+%% Student writing thesis, \student{First Middle}{Last}
 \student{John Mark}{Smith} % a full middle name
 %\student{John M.}{Smith} % a middle initial
 
