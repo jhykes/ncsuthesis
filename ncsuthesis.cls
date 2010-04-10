@@ -13,7 +13,7 @@
 %% --------------------------------------------------------------------
 %% 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2010/02/24 v0.2 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2010/04/10 v0.2.2 NC State ETD conformant thesis class]
 %% -------------------------------------------------------------------------- %%
 %% ------------------------------ Thesis type ------------------------------- %%
 %% -------------------------------------------------------------------------- %%
@@ -247,7 +247,6 @@
     \renewcommand{\ncsu@memberV}{#2}
     \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberVtitle}{#1}}
 }
-
 
 \newcommand{\ncsu@titlepageparagraph}{
  \ifthenelse{\equal{\ncsu@thesistype}{phd}}{

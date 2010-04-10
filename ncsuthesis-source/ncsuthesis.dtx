@@ -78,7 +78,7 @@ and the derived files           ncsuthesis.ins,
 %</internal>
 %<*class>
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2010/02/24 v0.2 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2010/04/10 v0.2.2 NC State ETD conformant thesis class]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -113,7 +113,7 @@ and the derived files           ncsuthesis.ins,
 %\author{
 %  Joshua Hykes\thanks{E-mail: jmhykes@ncsu.edu}
 %}
-%\date{Released 2/24/2010}
+%\date{Released 4/10/2010}
 %
 %\maketitle
 %
@@ -155,6 +155,14 @@ and the derived files           ncsuthesis.ins,
 %                     control the styles so that making changes is simple.
 %                     One common typographical style is to set headings
 %                     in a \textsf{sans serif font}.
+%
+%    \item[Margin] The margin has been set to the minimum required.
+%                     Feel free to increase the margins in the class
+%                     file, as the default line lengths are a bit long.
+%                     For example, using Computer Modern at 11 point, the default
+%                     margins give line lengths of about 90 characters,
+%                     while experts typically recommend 60 to 70
+%                     characters.
 %
 %    \item[Line spacing] ETD rules permit either 1.5 or double spacing.
 %                     One and a half spacing will give a look closer to
@@ -210,10 +218,24 @@ and the derived files           ncsuthesis.ins,
 %  August 2008, Arnav Jhala in December 2008, Manish Sachdev in
 %  January 2008, and Terry Byron.
 %  
+%\changes{v0.2}{2010/01/19}{A number of changes suggested by Dr.~Bloomfield, 
+%             including improved chapter headings, checking for a period
+%             after a middle initial, and natbib compatibility.}
+%
+%\changes{v0.2.1}{2010/02/24}{Appendix spacing improvements and a few other
+%             patches from Dr.~Bloomfield.}
+%
+%\changes{v0.2.2}{2010/04/10}{Support for up to six committee members, and
+%             the ability to change the titles listed under each member.
+%             A patch from Dr.~Bloomfield to set URL hyperlinks in black,
+%             as well as a related suggestion from Qiang Wang about another
+%             hyperlink color issue.}
+%
 %
 %\StopEventually{
+%  \clearpage
 %  \PrintChanges
-%  \PrintIndex
+%  %\PrintIndex
 %}
 %
 %\section*{The Code}
@@ -405,17 +427,53 @@ and the derived files           ncsuthesis.ins,
 \newcommand{\ncsu@committeesize}{4}
 \providecommand{\committeesize}[1]{\renewcommand{\ncsu@committeesize}{#1}}
 
+%% For each committee member, we have their name and title.
+%%  By default, their title is empty.  We use an optional argument
+%%  to set the title of committee members or to set the chair's
+%%  title to something other than `Chair of Advisory Committee'.
 \newcommand{\ncsu@chair}{Advisor Q. Chair}
-\providecommand{\chair}[1]{\renewcommand{\ncsu@chair}{#1}}
+\newcommand{\ncsu@chairtitle}{Chair of Advisory Committee}
+\providecommand{\chair}[2][]{
+    \renewcommand{\ncsu@chair}{#2}
+    % Checking if optional title argument is present.
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@chairtitle}{#1}}
+}
 
 \newcommand{\ncsu@memberI}{Member 1 of Committee}
-\providecommand{\memberI}[1]{\renewcommand{\ncsu@memberI}{#1}}
+\newcommand{\ncsu@memberItitle}{}
+\providecommand{\memberI}[2][]{
+    \renewcommand{\ncsu@memberI}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberItitle}{#1}}
+}
 
 \newcommand{\ncsu@memberII}{Member 2 of Committee}
-\providecommand{\memberII}[1]{\renewcommand{\ncsu@memberII}{#1}}
+\newcommand{\ncsu@memberIItitle}{}
+\providecommand{\memberII}[2][]{
+    \renewcommand{\ncsu@memberII}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIItitle}{#1}}
+}
 
 \newcommand{\ncsu@memberIII}{Member 3 of Committee}
-\providecommand{\memberIII}[1]{\renewcommand{\ncsu@memberIII}{#1}}
+\newcommand{\ncsu@memberIIItitle}{}
+\providecommand{\memberIII}[2][]{
+    \renewcommand{\ncsu@memberIII}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIIItitle}{#1}}
+}
+
+\newcommand{\ncsu@memberIV}{Member 4 of Committee}
+\newcommand{\ncsu@memberIVtitle}{}
+\providecommand{\memberIV}[2][]{
+    \renewcommand{\ncsu@memberIV}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIVtitle}{#1}}
+}
+
+\newcommand{\ncsu@memberV}{Member 5 of Committee}
+\newcommand{\ncsu@memberVtitle}{}
+\providecommand{\memberV}[2][]{
+    \renewcommand{\ncsu@memberV}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberVtitle}{#1}}
+}
+
 
 \newcommand{\ncsu@titlepageparagraph}{
  \ifthenelse{\equal{\ncsu@thesistype}{phd}}{
@@ -451,19 +509,38 @@ and the derived files           ncsuthesis.ins,
 \newcommand{\ncsu@committeesignatures}{
   \ifthenelse{\ncsu@committeesize=3}{
     \begin{tabular}[t]{c@{\hspace{0.5in}}c}
-       \ncsu@signatureline{\ncsu@memberI} &
-       \ncsu@signatureline{\ncsu@memberII} \\[6.7em]
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6.7em]
     \end{tabular}
-    \ncsu@signatureline[Chair of Advisory Committee]{\ncsu@chair}
+    \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}
 }{} % end ifthenelse = 3
   \ifthenelse{\ncsu@committeesize=4}{
     \begin{tabular}[t]{c@{\hspace{0.5in}}c}
-       \ncsu@signatureline{\ncsu@memberI} &
-       \ncsu@signatureline{\ncsu@memberII} \\[6em]
-       \ncsu@signatureline{\ncsu@memberIII} &
-       \ncsu@signatureline[Chair of Advisory Committee]{\ncsu@chair} \\
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
+       \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+       \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
     \end{tabular}
 }{} % end ifthenelse = 4
+  \ifthenelse{\ncsu@committeesize=5}{
+    \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+       \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+       \ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5.7em]
+    \end{tabular}
+    \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}
+}{} % end ifthenelse = 5
+  \ifthenelse{\ncsu@committeesize=6}{
+    \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+       \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+       \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+       \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+       \ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
+       \ncsu@signatureline[\ncsu@memberVtitle]{\ncsu@memberV} &
+       \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
+    \end{tabular}
+}{} % end ifthenelse = 6
 }
 
 \newcommand{\maketitlepage}{
@@ -673,7 +750,7 @@ and the derived files           ncsuthesis.ins,
 \regtotcounter{chapter} % chapter counter is used for appendices
 
 \AtBeginDocument{%
-%% Since ETD requirements are different than LaTeX's normal formatting of 
+%% Since ETD requirements are different than LaTeX's normal formatting of
 %% the Table of Content's Appendix listings,
 %% we change the indentation of chapters, sections, and subsections in
 %% the appendix part of the table of contents, but no deeper divisions,
