@@ -78,7 +78,7 @@ and the derived files           ncsuthesis.ins,
 %</internal>
 %<*class>
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2010/04/10 v0.2.2 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2010/11/02 v0.2.3 NC State ETD conformant thesis class]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -231,6 +231,15 @@ and the derived files           ncsuthesis.ins,
 %             as well as a related suggestion from Qiang Wang about another
 %             hyperlink color issue.}
 %
+%\changes{v0.2.3}{2010/11/02}{Changed the method of adding space between 
+%             colon and caption text in figures and tables.  The previous
+%             method caused the space to appear in List of Figures and Tables.
+%             Increased slightly the spacing between bottom of text and page 
+%             number since the thesis editor complained about this to one
+%             student. Added the textcomp package to get a better copyright 
+%             sign.}
+%
+%
 %
 %\StopEventually{
 %  \clearpage
@@ -300,6 +309,8 @@ and the derived files           ncsuthesis.ins,
 \newlength{\ncsu@footskip}
 \setlength{\ncsu@footskip}{\ncsu@capitalheight}
 \addtolength{\ncsu@footskip}{2\baselineskip}
+\addtolength{\ncsu@footskip}{0.5ex}  % A little extra space to ensure there
+                                     %  are 2 full double spaced lines
 \RequirePackage[includefoot,
                 margin=1in,
                 lmargin=1.25in,
@@ -705,14 +716,8 @@ and the derived files           ncsuthesis.ins,
 %% -------------------------------------------------------------------------- %%
 %%  Adding space to start of caption
 %%   save
-\let\ncsu@caption\caption
-\renewcommand{\caption}[2][]{
-    \ifthenelse{\equal{#1}{""}}
-         %% if optional string empty
-         {\ncsu@caption[#1]{\,\,#2}}
-         %% else, optional string not empty
-         {\ncsu@caption{\,\,#2}}
-}
+\RequirePackage{caption}
+\DeclareCaptionFormat{plain}{#1:\hspace{0.8em}#3}
 
 %% -------------------------------------------------------------------------- %%
 %% -------------------------  References ------------------------------------ %%

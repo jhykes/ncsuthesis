@@ -13,7 +13,7 @@
 %% --------------------------------------------------------------------
 %% 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2010/04/10 v0.2.2 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2010/11/02 v0.2.3 NC State ETD conformant thesis class]
 %% -------------------------------------------------------------------------- %%
 %% ------------------------------ Thesis type ------------------------------- %%
 %% -------------------------------------------------------------------------- %%
@@ -74,6 +74,8 @@
 \newlength{\ncsu@footskip}
 \setlength{\ncsu@footskip}{\ncsu@capitalheight}
 \addtolength{\ncsu@footskip}{2\baselineskip}
+\addtolength{\ncsu@footskip}{0.5ex}  % A little extra space to ensure there
+                                     %  are 2 full double spaced lines
 \RequirePackage[includefoot,
                 margin=1in,
                 lmargin=1.25in,
@@ -478,14 +480,8 @@
 %% -------------------------------------------------------------------------- %%
 %%  Adding space to start of caption
 %%   save
-\let\ncsu@caption\caption
-\renewcommand{\caption}[2][]{
-    \ifthenelse{\equal{#1}{""}}
-         %% if optional string empty
-         {\ncsu@caption[#1]{\,\,#2}}
-         %% else, optional string not empty
-         {\ncsu@caption{\,\,#2}}
-}
+\RequirePackage{caption}
+\DeclareCaptionFormat{plain}{#1:\hspace{0.8em}#3}
 
 %% -------------------------------------------------------------------------- %%
 %% -------------------------  References ------------------------------------ %%
