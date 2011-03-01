@@ -239,6 +239,8 @@ and the derived files           ncsuthesis.ins,
 %             student. Added the textcomp package to get a better copyright 
 %             sign.}
 %
+%\changes{v0.2.4}{2010/11/18}{Added the \textsf{letterpaper} option in case
+%             someone's \TeX\ installation default isn't letterpaper.}
 %
 %
 %\StopEventually{
@@ -278,7 +280,7 @@ and the derived files           ncsuthesis.ins,
 \DeclareOption*{\PackageWarning{ncsuthesis}{Unknown option `\CurrentOption'. Ignoring}}
 \ExecuteOptions{phd,onehalfspacing} % the default option is <phd, onehalfspacing>
 \ProcessOptions
-\LoadClass[openany,oneside,titlepage]{book}
+\LoadClass[openany,oneside,titlepage,letterpaper]{book}
 
 \RequirePackage{setspace}
 \RequirePackage{hyphenat}
