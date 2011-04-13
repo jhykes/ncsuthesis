@@ -57,11 +57,10 @@
 
 %% Members of committee
 %%  Each of the following member commands takes an optional argument
-%%   to specify their role on the committee.  For example, if you have two 
-%%   co-chairs on your committee of four, you would use the following:
-%%      \chair[Co-chair of Advisory Committee]{Doug Dodd}
-%%      ...
-%%      \memberIII[Co-chair of Advisory Committee]{Chris Cox}
+%%   to specify their role on the committee.
+%%  For co-chairs, use the commands:
+%%      \cochairI{Doug Dodd}
+%%      \cochairII{Chris Cox}
 %%
 \chair{Doug Dodd}
 \memberI{Alex Anderson}
@@ -69,6 +68,7 @@
 \memberIII{Chris Cox}   % unnecessary if committeesize=3
 \memberIV{Fred Ford}    % unnecessary if committeesize=3 or 4
 \memberV{Edna Everitt}  % unnecessary if committeesize=3, 4, or 5
+
 
 %% Student writing thesis, \student{First Middle}{Last}
 \student{John Mark}{Smith} % a full middle name
