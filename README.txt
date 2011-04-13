@@ -24,12 +24,12 @@ Archive contents:
        * dtx/ - contains ncsuthesis.dtx documented class file
            - The documentation can be built using "make" here.
            - See ncsuthesis.pdf for more information on the design.
-       * template/ - LaTeX example files
-       * other-packages/ - less common packages that may not be included
+       * template/  - LaTeX example files
+       * other-sty/ - less common packages that may not be included
                               in a standard LaTeX distribution
 
 
-The latest version of this package can be downloaded on github.com:
+The latest version of this package can be downloaded from github.com:
    https://github.com/jhykes/ncsuthesis
 
 A recent version of the student template and class file is available at:
