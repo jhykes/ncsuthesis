@@ -37,7 +37,7 @@ See http://www.latex-project.org/lppl.txt
 \endpreamble
 \postamble
 
-Copyright (C) 2009-2011 by Josh Hykes <jmhykes@ncsu.edu> and others
+Copyright (C) 2009-2012 by Josh Hykes <jmhykes@ncsu.edu> and others
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License (LPPL), either
@@ -78,7 +78,7 @@ and the derived files           ncsuthesis.ins,
 %</internal>
 %<*class>
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2011/06/02 v0.3.1 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2012/01/26 v0.4 NC State ETD conformant thesis class]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -250,6 +250,14 @@ and the derived files           ncsuthesis.ins,
 %             is present by moving the inclusion of \textsf{hyperref} below 
 %             \textsf{fncychap}.}
 %
+%\changes{v0.4}{2012/01/26}{Changed \verb|\chapter*| definition
+%             such that title-to-first line spacing is consistent for 
+%             any font size or line spacing.
+%             Also changed the default end-of-sentence space to a normal
+%             inter-word space via \verb|\frenchspacing|. Modern typographers
+%             recommend this practice.
+%
+%
 %\StopEventually{
 %  \clearpage
 %  \PrintChanges
@@ -294,7 +302,7 @@ and the derived files           ncsuthesis.ins,
 \RequirePackage{nolbreaks}
 \RequirePackage{ifthen}
 \RequirePackage{sectsty}
-\RequirePackage[titles]{tocloft}
+\RequirePackage{tocloft}
 \RequirePackage{graphicx}
 \RequirePackage[nottoc]{tocbibind} % includes lof, lot, refs in toc
 \RequirePackage{calc}
@@ -304,12 +312,15 @@ and the derived files           ncsuthesis.ins,
 %% -------------------------------------------------------------------------- %%
 %% Capital letter height
 \newlength{\ncsu@capitalheight}
-\setlength{\ncsu@capitalheight}{1.6ex}
 \settoheight{\ncsu@capitalheight}{D}
 
 %% Line height
 \newlength{\ncsu@lineheight}
 \setlength{\ncsu@lineheight}{2.0ex}
+
+%% Leading height: The leading changes thoughout the document, so this
+%%  length must be updated
+\newlength{\ncsu@leading}
 
 %% We must add two double spaces plus one capital-height (for the page number)
 %%  to footskip.  Footskip is measured from the top of the bottom margin.
@@ -339,6 +350,11 @@ and the derived files           ncsuthesis.ins,
 \providecommand{\headingformat}[1]{
     \renewcommand{\ncsu@headingformat}{\ncsu@dispositionformat #1}
 }
+
+%% \chapter*-to-first line space
+%% This applies to preliminary headings, and ToC, LoF, LoT
+\newlength{\ncsu@afterschapsep}
+\setlength{\ncsu@afterschapsep}{2\ncsu@lineheight}
 
 %% -------------------------------------------------------------------------- %%
 %% Headers/footers - page number
@@ -396,12 +412,29 @@ and the derived files           ncsuthesis.ins,
 %% -------------------------------------------------------------------------- %%
 
 %% -------------------------------------------------------------------------- %%
-%%  Redefine the \chapter* driver \@makeschapterhead
-%% Center the chapter* head:
+%%  Redefine the \chapter* driver \@makeschapterhead. This is used for the
+%%   preliminary headings.
+%%   The spacing between the title baseline and the top of capital letters on
+%%   the first line is specified by \ncsu@afterschapsep. However, this vertical
+%%   height built by two separate lengths:
+%%       1. the space between the baseline of the title and the top of the 
+%%           first line (including leading above the line).
+%%              (\ncsu@afterchapsbeforeleadingsep)
+%%       2. From the top of the first line leading to the top of
+%%           capital letters on the first line. (\ncsu@leading)
 \AtBeginDocument{% at begin doc is necessary since fncychap
                  %  redefines \@makeschapterhead
     \renewcommand{\@makeschapterhead}[1]{%
-        {\parindent0pt\centering\ncsu@headingformat#1\par\nobreak\vskip25pt}%
+        % Measure the leading here (which depends on the current line spacing),
+        % and adjust the spacing accordingly between the baseline of the
+        % heading and the top of capital letters on the first line.
+        \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+        \setlength{\ncsu@afterchapsbeforeleadingsep}%
+                  {\ncsu@afterschapsep-\ncsu@leading}%
+        {\noindent\centering%
+          \ncsu@headingformat#1%
+          \par\nobreak%
+          \vspace{\ncsu@afterchapsbeforeleadingsep}}%
     }
 }
 
@@ -656,8 +689,8 @@ and the derived files           ncsuthesis.ins,
 %% ------------ Dedication, biography, and acknowledgements ----------------- %%
 %% -------------------------------------------------------------------------- %%
 %%  Template
-\newcommand{\ncsu@dedbioack}[1]{
-    \chapter*{{\ncsu@headingformat{#1}}}
+\newcommand{\ncsu@dedbioack}[1]{%
+    \chapter*{#1}
 }
 
 %%  Dedication
@@ -682,32 +715,52 @@ and the derived files           ncsuthesis.ins,
 \settowidth{\cftchapnumwidth}{\textbf{Chapter 00}}
 \renewcommand{\cftchappresnum}{Chapter }
 \renewcommand{\cftchapleader}{\cftdotfill{\cftsecdotsep}}
-\newcommand{\thesistableofcontents}{
-    \singlespacing
-    \tableofcontents
-    \clearpage
-    \ncsu@defaultspacing
+\newcommand{\thesistableofcontents}{%
+    \singlespacing%
+    \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+    \setlength{\cftaftertoctitleskip}%
+              {\ncsu@afterchapssep-\cftbeforechapskip-\ncsu@leading}%
+    \tableofcontents%
+    \clearpage%
+    \ncsu@defaultspacing%
 }
+%% tocloft typesets ToC title, so we must give it our heading formats
+\renewcommand{\cfttoctitlefont}{\hfill\ncsu@headingformat}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\setlength{\cftbeforetoctitleskip}{0pt}
 
 \renewcommand{\listfigurename}{List of Figures}
 \settowidth{\cftfignumwidth}{Figure 00.00}
 \renewcommand{\cftfigpresnum}{Figure }
-\newcommand{\thesislistoffigures}{
-    \singlespacing
-    \listoffigures
-    \clearpage
-    \ncsu@defaultspacing
+\newcommand{\thesislistoffigures}{%
+    \singlespacing%
+    \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+    \setlength{\cftafterloftitleskip}%
+              {\ncsu@afterchapssep-\cftbeforechapskip-\ncsu@leading}%
+    \listoffigures%
+    \clearpage%
+    \ncsu@defaultspacing%
 }
+\renewcommand{\cftloftitlefont}{\hfill\ncsu@headingformat}
+\renewcommand{\cftafterloftitle}{\hfill}
+\setlength{\cftbeforeloftitleskip}{0pt}
 
 \renewcommand{\listtablename}{List of Tables}
 \settowidth{\cfttabnumwidth}{Table 00.00}
 \renewcommand{\cfttabpresnum}{Table }
-\newcommand{\thesislistoftables}{
-    \singlespacing
-    \listoftables
-    \clearpage
-    \ncsu@defaultspacing
+\newcommand{\thesislistoftables}{%
+    \singlespacing%
+    \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+    \setlength{\cftafterlottitleskip}%
+              {\ncsu@afterchapssep-\cftbeforechapskip-\ncsu@leading}%
+    \listoftables%
+    \clearpage%
+    \ncsu@defaultspacing%
 }
+\renewcommand{\cftlottitlefont}{\hfill\ncsu@headingformat}
+\renewcommand{\cftafterlottitle}{\hfill}
+\setlength{\cftbeforelottitleskip}{0pt}
+
 
 %% -------------------------------------------------------------------------- %%
 %% ------------------------- Landscape Pages  ------------------------------- %%
