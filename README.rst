@@ -1,7 +1,7 @@
 ncsuthesis -- NC State LaTeX class and file templates
 -----------------------------------------------------
 
-* Author & maintainter: Josh Hykes
+* Author & maintainer: Josh Hykes
 * E-mail: jmhykes@ncsu.edu
 * Released under the LaTeX Project Public License v1.3c or later
 * See http://www.latex-project.org/lppl.txt
@@ -32,8 +32,8 @@ Archive contents
            - See ncsuthesis.pdf for more information on the design.
 
        * template/  - LaTeX example files
-       * other-sty/ - less common packages that may not be included
-         in a standard LaTeX distribution
+       * other-sty/ - less common/newer packages that may not be included
+         in a LaTeX distribution
 
 
 The latest version of this package can be downloaded from github.com:
