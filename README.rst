@@ -1,9 +1,10 @@
---------------------------------------------------------------------
-NC State LaTeX class and file templates.
+ncsuthesis -- NC State LaTeX class and file templates
+-----------------------------------------------------
+
+Author & maintainter: Josh Hykes
 E-mail: jmhykes@ncsu.edu
 Released under the LaTeX Project Public License v1.3c or later
 See http://www.latex-project.org/lppl.txt
---------------------------------------------------------------------
 
 The ncsuthesis class provides formatting, macros, and content
 to meet the thesis requirements of North Carolina State University,
