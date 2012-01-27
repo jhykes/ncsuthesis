@@ -721,6 +721,7 @@ and the derived files           ncsuthesis.ins,
 \renewcommand{\cftchapleader}{\cftdotfill{\cftsecdotsep}}
 \newcommand{\thesistableofcontents}{%
     \singlespacing%
+    \setlength{\cftbeforetoctitleskip}{-\baselineskip}
     \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
     \setlength{\cftaftertoctitleskip}%
               {\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
@@ -731,13 +732,13 @@ and the derived files           ncsuthesis.ins,
 %% tocloft typesets ToC title, so we must give it our heading formats
 \renewcommand{\cfttoctitlefont}{\hfill\ncsu@headingformat}
 \renewcommand{\cftaftertoctitle}{\hfill}
-\setlength{\cftbeforetoctitleskip}{0pt}
 
 \renewcommand{\listfigurename}{List of Figures}
 \settowidth{\cftfignumwidth}{Figure 00.00}
 \renewcommand{\cftfigpresnum}{Figure }
 \newcommand{\thesislistoffigures}{%
     \singlespacing%
+    \setlength{\cftbeforeloftitleskip}{-\baselineskip}
     \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
     \setlength{\cftafterloftitleskip}%
               {\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
@@ -747,13 +748,13 @@ and the derived files           ncsuthesis.ins,
 }
 \renewcommand{\cftloftitlefont}{\hfill\ncsu@headingformat}
 \renewcommand{\cftafterloftitle}{\hfill}
-\setlength{\cftbeforeloftitleskip}{0pt}
 
 \renewcommand{\listtablename}{List of Tables}
 \settowidth{\cfttabnumwidth}{Table 00.00}
 \renewcommand{\cfttabpresnum}{Table }
 \newcommand{\thesislistoftables}{%
     \singlespacing%
+    \setlength{\cftbeforelottitleskip}{-\baselineskip}
     \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
     \setlength{\cftafterlottitleskip}%
               {\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
@@ -763,7 +764,6 @@ and the derived files           ncsuthesis.ins,
 }
 \renewcommand{\cftlottitlefont}{\hfill\ncsu@headingformat}
 \renewcommand{\cftafterlottitle}{\hfill}
-\setlength{\cftbeforelottitleskip}{0pt}
 
 
 %% -------------------------------------------------------------------------- %%
