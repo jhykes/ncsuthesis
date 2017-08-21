@@ -43,6 +43,6 @@ A recent version of the student template and class file is available at:
    http://www4.ncsu.edu/~jmhykes/latex.html
 
 The NCSU ETD template website is:
-   http://www.ncsu.edu/grad/etd/templates.html
+   https://grad.ncsu.edu/students/etd/etd-templates/
 
 Send thesis class bug reports or patches to Josh Hykes at jmhykes@ncsu.edu
