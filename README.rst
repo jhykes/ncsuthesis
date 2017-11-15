@@ -39,9 +39,6 @@ Archive contents
 The latest version of this package can be downloaded from github.com:
    https://github.com/jhykes/ncsuthesis
 
-A recent version of the student template and class file is available at:
-   http://www4.ncsu.edu/~jmhykes/latex.html
-
 The NCSU ETD template website is:
    https://grad.ncsu.edu/students/etd/etd-templates/
 
