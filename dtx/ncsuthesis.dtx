@@ -730,8 +730,8 @@ and the derived files           ncsuthesis.ins,
     \ncsu@defaultspacing%
 }
 %% tocloft typesets ToC title, so we must give it our heading formats
-\renewcommand{\cfttoctitlefont}{\hfill\ncsu@headingformat}
-\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cfttoctitlefont}{\hspace*{\fill}\ncsu@headingformat}
+\renewcommand{\cftaftertoctitle}{\hspace*{\fill}}  % https://tex.stackexchange.com/a/255699
 
 \renewcommand{\listfigurename}{List of Figures}
 \settowidth{\cftfignumwidth}{Figure 00.00}
