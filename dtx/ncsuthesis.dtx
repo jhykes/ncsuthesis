@@ -37,7 +37,7 @@ See http://www.latex-project.org/lppl.txt
 \endpreamble
 \postamble
 
-Copyright (C) 2009-2012 by Josh Hykes <jmhykes@ncsu.edu> and others
+Copyright (C) 2009-2019 by Josh Hykes <jmhykes@ncsu.edu> and others
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License (LPPL), either
@@ -78,7 +78,7 @@ and the derived files           ncsuthesis.ins,
 %</internal>
 %<*class>
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2012/01/26 v0.4 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2019/03/05 v0.4.1 NC State ETD conformant thesis class]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -258,6 +258,14 @@ and the derived files           ncsuthesis.ins,
 %             recommend this practice.}
 %
 %
+%\changes{v0.4.1}{2019/03/05}{
+% Body text alignment changed to left-aligned in accordance with NCSU ETD guidelines. 
+% (Invisible) numbering of abstract and copyright pages changed to alph (a, b, etc.)
+% to avoid having two pages named 'i.' 
+% This makes it easier to work with in a pdf reader and avoids \LaTeX warnings. 
+% }
+%
+%
 %\StopEventually{
 %  \clearpage
 %  \PrintChanges
@@ -307,6 +315,7 @@ and the derived files           ncsuthesis.ins,
 \RequirePackage{graphicx}
 \RequirePackage[nottoc]{tocbibind} % includes lof, lot, refs in toc
 \RequirePackage{calc}
+\RequirePackage[document]{ragged2e} % left-aligns the entire document
 
 %%----------------------------------------------------------------------------%%
 %%---------------------------- Formatting Options ----------------------------%%
@@ -438,6 +447,9 @@ and the derived files           ncsuthesis.ins,
           \par\nobreak%
           \vspace{\ncsu@afterschapbeforeleadingsep}}%
     }
+
+% keep indented first line (otherwise ragged2e package will set to 0)
+\setlength{\RaggedRightParindent}{\parindent} 
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -448,7 +460,6 @@ and the derived files           ncsuthesis.ins,
 \newcommand{\abstractname}{Abstract}
 \newenvironment{abstract}{%
    \singlespacing
-   \titlepage
    \chapter*{\abstractname}
    \MakeUppercase{\ncsu@authorlast{}, \ncsu@authorfirstmiddle{}}%
    \ifthenelse{\boolean{@ncsu@needsperiod}}{\@. }{~}%
@@ -458,16 +469,20 @@ and the derived files           ncsuthesis.ins,
               {\ncsu@chair}{\ncsu@cochairI\ and \ncsu@cochairII}.)}\\
 
    \ncsu@defaultspacing
-   \thispagestyle{empty}
-   \pagestyle{empty}
+    % make (hidden) page numbers for the pre-frontmatter alphabetic
+    % \frontmatter will reset this to roman numeerals (i)
+    % \mainmatter will reset this to arabic numerals (1)
+   \pagenumbering{alph} 
+   \thispagestyle{empty} % no page numbers here
+   \pagestyle{empty} % or in any of the following pre-frontmatter
 }%
-{\endtitlepage \pagestyle{plain}}
+{\clearpage}
 
 %% -------------------------------------------------------------------------- %%
-%% Abstract page commands
+%% Copyright page commands
 \newcommand{\makecopyrightpage}{
-    \begin{titlepage}
-    \centering
+   \clearpage 
+   \begin{center}
       \quad
       \vspace{0.35\textheight}
 
@@ -475,7 +490,8 @@ and the derived files           ncsuthesis.ins,
       All Rights Reserved
 
       \vfill
-    \end{titlepage}
+   \end{center}
+   \thispagestyle{empty}
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -663,8 +679,8 @@ and the derived files           ncsuthesis.ins,
 }
 
 \newcommand{\maketitlepage}{
-     \thispagestyle{empty}
      \clearpage
+     \thispagestyle{empty}
      \singlespacing
       \begin{center}
             \vfill
