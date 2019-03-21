@@ -78,7 +78,7 @@ and the derived files           ncsuthesis.ins,
 %</internal>
 %<*class>
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ncsuthesis}[2019/03/05 v0.4.1 NC State ETD conformant thesis class]
+\ProvidesClass{ncsuthesis}[2019/03/21 v0.4.2 NC State ETD conformant thesis class]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -266,6 +266,12 @@ and the derived files           ncsuthesis.ins,
 % }
 %
 %
+%\changes{v0.4.2}{2019/03/21}{
+% Fix regression with page numbering of frontmatter. 
+% Fix warning caused by outdated ragged2e package (ragged2e dated 2009-05-21). 
+% }
+%
+%
 %\StopEventually{
 %  \clearpage
 %  \PrintChanges
@@ -315,7 +321,51 @@ and the derived files           ncsuthesis.ins,
 \RequirePackage{graphicx}
 \RequirePackage[nottoc]{tocbibind} % includes lof, lot, refs in toc
 \RequirePackage{calc}
+
+%%----------------------------------------------------------------------------%%
+%%---------------------------- Left Align Document ----------------------------%%
+%% -------------------------------------------------------------------------- %%
+%% We will use the package ragged2e to left-align the entire document.
+%% However, ragged2e gives a warning witht the [document] option.
+%% The lines below will eliminate that warning.
+% verify that \@arrayparboxrestore hasn't changed from LaTeX default
+\show\@arrayparboxrestore
+\CheckCommand*{\@arrayparboxrestore}{%
+\let \if@nobreak \iffalse 
+\let \if@noskipsec \iffalse 
+\let \par \@@par 
+\let \-\@dischyph 
+\let \'\@acci \let \`\@accii 
+\let \=\@acciii \parindent \z@ \parskip \z@skip \everypar {}\linewidth \hsize 
+\@totalleftmargin \z@ 
+\leftskip \z@skip \rightskip \z@skip \@rightskip \z@skip 
+\parfillskip \@flushglue 
+\lineskip \normallineskip 
+\lineskiplimit \normallineskiplimit 
+\baselineskip \normalbaselineskip 
+\sloppy }%
+% redefine \@arrayparboxrestore to the old definition that ragged2e expects
+\def\@arrayparboxrestore{%
+\let\if@nobreak\iffalse
+\let\if@noskipsec\iffalse
+\let\par\@@par
+\let\-\@dischyph
+\let\'\@acci\let\`\@accii\let\=\@acciii
+\parindent\z@ \parskip\z@skip
+\everypar {}\linewidth\hsize
+\@totalleftmargin\z@
+\leftskip\z@skip \rightskip\z@skip \@rightskip\z@skip
+\parfillskip\@flushglue \lineskip\normallineskip
+\baselineskip\normalbaselineskip
+\sloppy
+}%
+%% Now we can call ragged2e without a warning
 \RequirePackage[document]{ragged2e} % left-aligns the entire document
+%%  finally we keep the existing \parindent (otherwise ragged2e package will set to 0)
+\setlength{\RaggedRightParindent}{\parindent}
+
+
+
 
 %%----------------------------------------------------------------------------%%
 %%---------------------------- Formatting Options ----------------------------%%
@@ -447,9 +497,6 @@ and the derived files           ncsuthesis.ins,
           \par\nobreak%
           \vspace{\ncsu@afterschapbeforeleadingsep}}%
     }
-
-% keep indented first line (otherwise ragged2e package will set to 0)
-\setlength{\RaggedRightParindent}{\parindent} 
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -470,7 +517,7 @@ and the derived files           ncsuthesis.ins,
 
    \ncsu@defaultspacing
     % make (hidden) page numbers for the pre-frontmatter alphabetic
-    % \frontmatter will reset this to roman numeerals (i)
+    % I will set this to roman numerals (i) in \maketitlepage 
     % \mainmatter will reset this to arabic numerals (1)
    \pagenumbering{alph} 
    \thispagestyle{empty} % no page numbers here
@@ -680,6 +727,7 @@ and the derived files           ncsuthesis.ins,
 
 \newcommand{\maketitlepage}{
      \clearpage
+     \pagenumbering{roman} 
      \thispagestyle{empty}
      \singlespacing
       \begin{center}
