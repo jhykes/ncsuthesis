@@ -266,6 +266,11 @@ and the derived files           ncsuthesis.ins,
 % }
 %
 %
+%\changes{v0.4.2}{2019/03/20}{
+% Fix regression with page numbering of frontmatter
+% }
+%
+%
 %\StopEventually{
 %  \clearpage
 %  \PrintChanges
@@ -470,7 +475,7 @@ and the derived files           ncsuthesis.ins,
 
    \ncsu@defaultspacing
     % make (hidden) page numbers for the pre-frontmatter alphabetic
-    % \frontmatter will reset this to roman numeerals (i)
+    % I will set this to roman numerals (i) in \maketitlepage 
     % \mainmatter will reset this to arabic numerals (1)
    \pagenumbering{alph} 
    \thispagestyle{empty} % no page numbers here
@@ -680,6 +685,7 @@ and the derived files           ncsuthesis.ins,
 
 \newcommand{\maketitlepage}{
      \clearpage
+     \pagenumbering{roman} 
      \thispagestyle{empty}
      \singlespacing
       \begin{center}
