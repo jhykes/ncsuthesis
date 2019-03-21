@@ -267,7 +267,8 @@ and the derived files           ncsuthesis.ins,
 %
 %
 %\changes{v0.4.2}{2019/03/20}{
-% Fix regression with page numbering of frontmatter
+% Fix regression with page numbering of frontmatter. 
+% Fix warning caused by outdated ragged2e package (ragged2e dated 2009-05-21). 
 % }
 %
 %
@@ -496,9 +497,6 @@ and the derived files           ncsuthesis.ins,
           \par\nobreak%
           \vspace{\ncsu@afterschapbeforeleadingsep}}%
     }
-
-% keep indented first line (otherwise ragged2e package will set to 0)
-\setlength{\RaggedRightParindent}{\parindent} 
 }
 
 %% -------------------------------------------------------------------------- %%
