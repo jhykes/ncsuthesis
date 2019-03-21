@@ -12,7 +12,7 @@ from glob import glob
 # command line options
 from optparse import OptionParser
 parser = OptionParser()
-parser.add_option("-v", "--version", dest="version", default='0.1',
+parser.add_option("-v", "--version", dest="version", default='0.4',
                   help="build student VERSION", metavar="VERSION")
 parser.add_option("-n", "--no-clobber", 
                   action="store_true", dest="no_clobber", default=False,
